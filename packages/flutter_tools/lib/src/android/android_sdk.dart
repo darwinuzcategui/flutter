@@ -323,13 +323,10 @@ class AndroidSdk {
   String? getNdkCompilerPath(String binaryName) {
     final Directory ndk = directory.childDirectory('ndk');
     if (!ndk.existsSync()) {
-      throwToolExit('No NDK found in $directory');
+      return null;
     }
     final List<Directory> ndkVersions =
         ndk.listSync().whereType<Directory>().toList()..reversed;
-    if (ndkVersions.isEmpty) {
-      throwToolExit('No NDK versions found in $ndk');
-    }
     for (final Directory ndkVersion in ndkVersions) {
       final Directory prebuilt = ndkVersion
           .childDirectory('toolchains')
@@ -348,7 +345,7 @@ class AndroidSdk {
         }
       }
     }
-    throwToolExit('No NDK versions found in $ndk');
+    return null;
   }
 
   String? getNdkClangPath() =>
